@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+</head>
+<body>
+
+  <video id='foo' controls/>
+
+  <script type="text/javascript" src="node_modules/hls.js/dist/hls.js"></script>
+
+  <script type='text/javascript'>
+    setTimeout(function() {
+      var vid = document.getElementById('foo');
+
+      vid.addEventListener('timeupdate', function (d) {
+        console.log('timeupdate: ' + d.currentTarget.currentTime);
+      });
+
+      vid.addEventListener('error', function (err) {
+        console.error('error: ', err);
+      });
+
+      vid.addEventListener('seeked', function (e) {
+        console.log('seeked', e);
+      });
+
+      vid.addEventListener('seeking', function (e) {
+        console.log('seeking', e);
+      });
+
+      vid.addEventListener('stalled', function (e) {
+        console.error('stalled: ', e);
+        console.log(vid.readyState);
+      });
+
+      vid.addEventListener('progress', function (e) {
+        console.log('progress:', e);
+      });
+
+      vid.addEventListener('durationchange', function (e) {
+        console.error('duration changed', e);
+      });
+
+      vid.addEventListener('suspend', function (e) {
+        console.log('suspend', e);
+      });
+
+      vid.addEventListener('canplay', function (e) {
+        console.log('can play', e);
+      });
+
+      var hls = new Hls();
+      hls.loadSource('http://10.126.140.241:8080/cameras/F0AU3r2mkPHwmtYJ/video.m3u8?begin=1457413200000&end=1457499599999&stream=9fea404d-0d97-4ab6-e7ac-b6c64e3af847');
+      hls.attachMedia(vid);
+      hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+        vid.play();
+      });
+    }, 1000);
+  </script>
+</body>
+</html>
